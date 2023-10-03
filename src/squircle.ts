@@ -30,6 +30,8 @@ export class Squircle extends LitElement {
   protected fill = 'transparent';
 
   protected firstUpdated() {
+    // Force render as block, otherwise the height will calcuate incorrect.
+    this.style.display = 'block';
     // Get the width and height of the shadow root, and save to the state
     // so we can trigger update after firstUpdated and rendering the svg
     // background correctly.
@@ -51,11 +53,11 @@ export class Squircle extends LitElement {
     //
     // Set padding to 0 and move to the inner container.
     this.style.padding = '0';
-    // Force render as block, otherwise the height will calcuate incorrect.
-    this.style.display = 'block';
     // Border is not supported.
     // @fixme Maybe we we can applied border in the svg.
     this.style.border = '0 solid transparent';
+    // Remove the background
+    this.style.backgroundColor = 'transparent';
   }
 
   render() {

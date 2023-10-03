@@ -119,10 +119,10 @@ export class Squircle extends LitElement {
     if (this.gradient) {
       gradient = `
         <defs>
-          <linearGradient id="${this._id}" gradientTransform="rotate(-${Number(this.gradient.angle)})">
+          <linearGradient id="${this._id}" gradientTransform="rotate(${this.gradient.angle})">
             ${this.gradient.colorStops.map(i => {
               return `<stop offset="${i.stop || '100%'}" stop-color="${i.color}" />`
-            })}
+            }).join('\n')}
           </linearGradient>
         </defs>
       `

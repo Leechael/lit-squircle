@@ -22,6 +22,7 @@
 
       .canvas {
         padding: 10px;
+        background: #e7e7b8;
       }
 
       .radius {
@@ -41,24 +42,29 @@
       }
 
       .example2 {
-        background-image: linear-gradient(140deg, rgba(234, 222, 219, .75) 0%, rgb(188, 112, 164) 50%, #ff9 75%, green);
-        padding: 8px 16px;
-        box-shadow: 8px 8px 2px 1px rgba(0, 0, 0, .45);
-      }
-
-      .example3 {
         background-color: red;
         padding: 8px 16px;
       }
-        .example3 nav {
+        .example2 nav {
           display: flex;
           justify-content: space-between;
         }
-        .example3 a {
+        .example2 a {
           color: #fff;
           font-weight: bold;
           text-decoration: none;
         }
+
+      .example3 {
+        background-image: linear-gradient(140deg, rgba(234, 222, 219, .75) 0%, rgb(188, 112, 164) 50%, #ff9 75%, green);
+        padding: 8px 16px;
+        /* box-shadow: 8px 8px 2px 1px rgba(0, 0, 0, .45); */
+      }
+
+      .example4 {
+        padding: 8px 16px;
+        box-shadow: 8px 8px 2px 1px rgba(0, 0, 0, .45);
+      }
     </style>
   </head>
   <body>
@@ -76,27 +82,40 @@
       </div>
     </section>
     <section>
-      <h2>02: shadow & gradient background</h2>
+      <h2>02: Nav & default settings</h2>
       <div class="canvas">
-        <x-squircle class="example2 squircle" radius="32">
-          <h1>Squircle</h1>
-        </x-squircle>
-      </div>
-      <div class="canvas">
-        <div class="example2 radius">
-          <h1>Squircle</h1>
-        </div>
-      </div>
-    </section>
-    <section>
-      <h2>03: Nav & default settings</h2>
-      <div class="canvas">
-        <x-squircle class="example3" radius="32">
+        <x-squircle class="example2" radius="32">
           <nav>
             <a href="#" aria-current="page">Home</a>
             <a href="#">Other page</a>
           </nav>
         </x-squircle>
+      </div>
+    </section>
+    <section>
+      <h2>03: gradient background</h2>
+      <div class="canvas">
+        <x-squircle class="example3 squircle" radius="32">
+          <h1>Squircle</h1>
+        </x-squircle>
+      </div>
+      <div class="canvas">
+        <div class="example3 radius">
+          <h1>Squircle</h1>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>04: shadow</h2>
+      <div class="canvas">
+        <x-squircle class="example4 squircle" radius="32">
+          <h1>Squircle</h1>
+        </x-squircle>
+      </div>
+      <div class="canvas">
+        <div class="example4 radius">
+          <h1>Squircle</h1>
+        </div>
       </div>
     </section>
   </body>

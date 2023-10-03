@@ -2,7 +2,7 @@ import { LitElement, css, html, unsafeCSS } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { getSvgPath } from 'figma-squircle'
 
-import style from './squircle.css' assert {type: 'css'};
+import style from './squircle.css?inline' assert {type: 'css'};
 
 /**
  * An example element.
@@ -34,7 +34,7 @@ export class Squircle extends LitElement {
       width += rect.width
       height += rect.height
     })
-    console.log('recalc', width, height)
+    console.log('reCalc', width, height)
     return [width, height]
   }
 

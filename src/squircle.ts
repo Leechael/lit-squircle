@@ -47,9 +47,6 @@ export class Squircle extends LitElement {
   cornerSmoothing: number = 0.6;
 
   @state()
-  protected containerStyles = unsafeCSS('')
-
-  @state()
   protected width = 0;
 
   @state()
@@ -61,30 +58,69 @@ export class Squircle extends LitElement {
   @state()
   protected gradient: Gradient | null = null;
 
-  protected _id: string;
+  protected containerStyles = unsafeCSS('')
+
+  protected instanceId: string;
 
   constructor() {
     super()
-    this._id = `squircle-${instanceId++}`
+    this.instanceId = `squircle-${instanceId++}`
   }
 
-  protected firstUpdated() {
-    // Force render as block, otherwise the height will calcuate incorrect.
-    this.style.display = 'block';
-
+  protected updateInnerContainerSize() {
     // Get the width and height of the shadow root, and save to the state
     // so we can trigger update after firstUpdated and rendering the svg
     // background correctly.
     const { width, height } = this.getBoundingClientRect()
     this.width = width;
     this.height = height;
+  }
 
+  protected firstUpdated() {
     // Copy style from the shadow root to the inner container.
     const computedStyle = getComputedStyle(this)
     const padding = computedStyle.padding
-    this.containerStyles = css`padding: ${unsafeCSS(padding)};`
+    const display = (computedStyle.display) as string
+
     this.fill = computedStyle.backgroundColor || 'transparent'
 
+    // Force render as block, otherwise the height will calcuate incorrect.
+    this.style.display = (display === 'block' || display === 'flex') ? display : 'block';
+
+    let innerDisplay = display
+    if (display === 'inline' || display === 'inline-block' || display === 'inline-flex') {
+      innerDisplay = 'block'
+    }
+
+    let flexSettings: string[] = []
+    if (innerDisplay === 'flex') {
+      flexSettings = [
+        computedStyle.flexGrow ? `flex-grow: ${computedStyle.flexGrow};` : '',
+        computedStyle.flexShrink ? `flex-shrink: ${computedStyle.flexShrink};` : '',
+        computedStyle.flexBasis ? `flex-basis: ${computedStyle.flexBasis};` : '',
+        computedStyle.alignSelf ? `align-self: ${computedStyle.alignSelf};` : '',
+        computedStyle.alignItems ? `align-items: ${computedStyle.alignItems};` : '',
+        computedStyle.alignContent ? `align-content: ${computedStyle.alignContent};` : '',
+        computedStyle.justifySelf ? `justify-self: ${computedStyle.justifySelf};` : '',
+        computedStyle.justifyItems ? `justify-items: ${computedStyle.justifyItems};` : '',
+        computedStyle.justifyContent ? `justify-content: ${computedStyle.justifyContent};` : '',
+        computedStyle.flexDirection ? `flex-direction: ${computedStyle.flexDirection};` : '',
+        computedStyle.flexWrap ? `flex-wrap: ${computedStyle.flexWrap};` : '',
+        computedStyle.order ? `order: ${computedStyle.order};` : '',
+        computedStyle.gap ? `gap: ${computedStyle.gap};` : '',
+      ]
+    }
+
+    this.containerStyles = css`
+      padding: ${unsafeCSS(padding)};
+      display: ${unsafeCSS(innerDisplay)};
+      ${unsafeCSS(flexSettings.join('\n'))}
+    `
+
+    this.updateInnerContainerSize()
+
+    // Experiement support for gradient background, let's support the simple single
+    // linear-gradient first.
     if (computedStyle.backgroundImage.indexOf('linear-gradient') !== -1) {
       this.gradient = parseCssLinearGradient(computedStyle.backgroundImage)
     }
@@ -92,6 +128,7 @@ export class Squircle extends LitElement {
     //
     // Reset the styles of the shadow root.
     //
+    // The padding move into inner container so we should remove it from the shadow root.
     this.style.padding = '0';
     // Border is not supported.
     // @fixme Maybe we we can applied border in the svg.
@@ -99,14 +136,18 @@ export class Squircle extends LitElement {
     // Remove the background
     this.style.background = 'transparent';
 
-    window.addEventListener('resize', () => {
-      const { width, height } = this.getBoundingClientRect()
-      this.width = width;
-      this.height = height;
-    })
+    // Reactive to the resizing events.
+    window.addEventListener('resize', this.updateInnerContainerSize.bind(this))
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('resize', this.updateInnerContainerSize.bind(this))
   }
 
   render() {
+    //
+    // Build SVG background image.
+    //
     const [ width, height ] = [this.width, this.height]
     const dots = getSvgPath({
       width,
@@ -119,14 +160,14 @@ export class Squircle extends LitElement {
     if (this.gradient) {
       gradient = `
         <defs>
-          <linearGradient id="${this._id}" gradientTransform="rotate(${this.gradient.angle})">
+          <linearGradient id="${this.instanceId}" gradientTransform="rotate(${this.gradient.angle})">
             ${this.gradient.colorStops.map(i => {
               return `<stop offset="${i.stop || '100%'}" stop-color="${i.color}" />`
             }).join('\n')}
           </linearGradient>
         </defs>
       `
-      fill = `url(#${this._id})`
+      fill = `url(#${this.instanceId})`
     }
     const svgCode = `
       <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
@@ -136,6 +177,9 @@ export class Squircle extends LitElement {
     `
     const dataUrl = `url('data:image/svg+xml;base64,${btoa(svgCode)}')`
 
+    //
+    // Construct the style for the inner container.
+    //
     // The init width && height is 0, so we not use it at first render.
     const sizes = (width !== 0 && height !== 0)
       ? css`width: ${width}px; height: ${height}px;`
@@ -152,6 +196,7 @@ export class Squircle extends LitElement {
       background-image: ${unsafeCSS(dataUrl)};
       background-repeat: no-repeat;
     `
+
     return html`
       <div style=${containerStyle}>
         <slot></slot>

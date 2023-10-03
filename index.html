@@ -44,11 +44,10 @@
       .example2 {
         background-color: red;
         padding: 8px 16px;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
       }
-        .example2 nav {
-          display: flex;
-          justify-content: space-between;
-        }
         .example2 a {
           color: #fff;
           font-weight: bold;
@@ -58,7 +57,6 @@
       .example3 {
         background-image: linear-gradient(140deg, rgba(234, 222, 219, .75) 0%, rgb(188, 112, 164) 50%, #ff9 75%, green);
         padding: 8px 16px;
-        /* box-shadow: 8px 8px 2px 1px rgba(0, 0, 0, .45); */
       }
 
       .example4 {
@@ -82,13 +80,11 @@
       </div>
     </section>
     <section>
-      <h2>02: Nav & default settings</h2>
+      <h2>02: flex</h2>
       <div class="canvas">
         <x-squircle class="example2" radius="32">
-          <nav>
-            <a href="#" aria-current="page">Home</a>
-            <a href="#">Other page</a>
-          </nav>
+          <a href="#" aria-current="page">Home</a>
+          <a href="#">Other page</a>
         </x-squircle>
       </div>
     </section>

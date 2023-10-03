@@ -1,13 +1,16 @@
 {
-  "name": "squircle",
-  "private": true,
-  "version": "0.0.0",
+  "name": "lit-squircle",
+  "version": "0.0.1",
   "type": "module",
+  "main": "dist/squircle.js",
+  "module": "dist/squircle.js",
+  "types": "dist/squircle.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "anaylze": "wca analyze src --outFile dist/custom-elements.json"
+    "anaylze": "wca analyze src --outFile dist/custom-elements.json",
+    "release": "npm run build && tsc -d && npm publish --access public"
   },
   "dependencies": {
     "figma-squircle": "^0.3.1",

@@ -5,12 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit + TS</title>
     <script type="module" src="/src/my-element.ts"></script>
+    <style>
+      .canvas {
+        padding: 10px;
+      }
+
+      .example1 {
+        text-align: center;
+        background: #000;
+        color: #fff;
+        padding: 8px 16px;
+        border: 2px solid red;
+        border-radius: 32px;
+      }
+    </style>
   </head>
   <body>
-    <div style="padding: 100px">
-      <x-squircle>
-        <h1>Vite + Lit</h1>
-      </x-squircle>
-    </div>
+    <section>
+      <h2>01: pure color background, padding.</h2>
+      <div class="canvas">
+        <x-squircle class="example1 squircle" radius="32">
+          <h1>Vite + Lit</h1>
+        </x-squircle>
+      </div>
+      <div class="canvas">
+        <div class="example1 radius">
+          <h1>Vite + Lit</h1>
+        </div>
+      </div>
+    </section>
   </body>
 </html>

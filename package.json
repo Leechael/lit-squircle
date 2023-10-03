@@ -1,10 +1,11 @@
 {
   "name": "lit-squircle",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "dist/squircle.js",
   "module": "dist/squircle.js",
   "types": "dist/squircle.d.ts",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

@@ -14,4 +14,24 @@ Limitation:
 - Partial & buggy gradient background supported.
 - Package size. not yet optimizing the final artifact size.
 
+## CAUTION!
 
+No yet production ready. If you want a more flexible implementation, consider use
+[figma-squircle](https://figma-squircle.vercel.app/) directly.
+
+## Usage
+
+For pure HTML, you just import the `lit-squircle.js` in the HTML head, then:
+
+```html
+<x-squircle radius="32">
+    <a href="#">Menu 1</a>
+    <a href="#">Menu 2</a>
+    <a href="#">Menu 3</a>
+    <a href="#">Menu 4</a>
+</x-squircle>
+```
+
+## Examples
+
+Check the `index.html` file.

@@ -4,9 +4,34 @@ import { getSvgPath } from 'figma-squircle'
 
 import style from './squircle.css?inline' assert {type: 'css'};
 
-function pxToNumber(px: string) {
-  return Number(px.replace(/px$/, ''))
+/**
+ * linear-gradient(140deg, rgb(234, 222, 219) 0%, rgb(188, 112, 164) 50%, rgb(191, 214, 65) 75%)
+ * linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%)
+ * linear-gradient(135deg, orange 60%, cyan)
+ * linear-gradient(to right,red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%)
+ * linear-gradient(140deg, rgb(234, 222, 219) 0%, rgb(188, 112, 164) 50%, #ff9 75%, green)
+ */
+const regex_linear_gradient = /linear-gradient\(\s*([^,]+)(\s*(,\s*#?\w+(\(([\.\d]+(\s*,\s*[\.\d]+)+)\))?(\s+\d+%)?)+)\)/
+const regex_linear_color_stop = /(#?\w+(\(([\.\d]+(\s*,\s*[\.\d]+)+)\))?)(\s+\d+%)?/g
+
+function parseCssLinearGradient(str: string) {
+  const match = str.match(regex_linear_gradient)
+  if (!match || !match.length || !match[1] || !match[2]) {
+    return null
+  }
+  const angle = match[1].trim()
+  const colorStops = Array.of(...match[2].matchAll(regex_linear_color_stop)).map(i => {
+    return { color: i[1], stop: (i[5] || '').trim() }
+  })
+  return { angle, colorStops }
 }
+
+interface Gradient {
+  angle: string
+  colorStops: {color: string, stop: string}[]
+}
+
+let instanceId = 0
 
 /**
  * @slot - This element has a slot
@@ -33,6 +58,16 @@ export class Squircle extends LitElement {
   @state()
   protected fill = 'transparent';
 
+  @state()
+  protected gradient: Gradient | null = null;
+
+  protected _id: string;
+
+  constructor() {
+    super()
+    this._id = `squircle-${instanceId++}`
+  }
+
   protected firstUpdated() {
     // Force render as block, otherwise the height will calcuate incorrect.
     this.style.display = 'block';
@@ -50,6 +85,10 @@ export class Squircle extends LitElement {
     this.containerStyles = css`padding: ${unsafeCSS(padding)};`
     this.fill = computedStyle.backgroundColor || 'transparent'
 
+    if (computedStyle.backgroundImage.indexOf('linear-gradient') !== -1) {
+      this.gradient = parseCssLinearGradient(computedStyle.backgroundImage)
+    }
+
     //
     // Reset the styles of the shadow root.
     //
@@ -58,7 +97,7 @@ export class Squircle extends LitElement {
     // @fixme Maybe we we can applied border in the svg.
     this.style.border = '0 solid transparent';
     // Remove the background
-    this.style.backgroundColor = 'transparent';
+    this.style.background = 'transparent';
 
     window.addEventListener('resize', () => {
       const { width, height } = this.getBoundingClientRect()
@@ -75,9 +114,24 @@ export class Squircle extends LitElement {
       cornerRadius: this.radius,
       cornerSmoothing: this.cornerSmoothing,
     })
+    let gradient = ''
+    let fill = this.fill
+    if (this.gradient) {
+      gradient = `
+        <defs>
+          <linearGradient id="${this._id}" gradientTransform="rotate(-${Number(this.gradient.angle)})">
+            ${this.gradient.colorStops.map(i => {
+              return `<stop offset="${i.stop || '100%'}" stop-color="${i.color}" />`
+            })}
+          </linearGradient>
+        </defs>
+      `
+      fill = `url(#${this._id})`
+    }
     const svgCode = `
       <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-        <path d="${dots}" fill="${this.fill}" />
+        ${gradient}
+        <path d="${dots}" fill="${fill}" />
       </svg>
     `
     const dataUrl = `url('data:image/svg+xml;base64,${btoa(svgCode)}')`
@@ -94,9 +148,9 @@ export class Squircle extends LitElement {
     const containerStyle = css`
       ${unsafeCSS(sizes)}
       ${unsafeCSS(this.containerStyles)}
+      background-color: transparent;
       background-image: ${unsafeCSS(dataUrl)};
       background-repeat: no-repeat;
-      border-radius: ${this.radius * 1.05}px;
     `
     return html`
       <div style=${containerStyle}>

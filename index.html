@@ -41,7 +41,7 @@
       }
 
       .example2 {
-        background-image: linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%);
+        background-image: linear-gradient(140deg, rgba(234, 222, 219, .75) 0%, rgb(188, 112, 164) 50%, #ff9 75%, green);
         padding: 8px 16px;
         box-shadow: 8px 8px 2px 1px rgba(0, 0, 0, .45);
       }
@@ -92,8 +92,10 @@
       <h2>03: Nav & default settings</h2>
       <div class="canvas">
         <x-squircle class="example3" radius="32">
-          <a href="#" aria-current="page">Home</a>
-          <a href="#">Other page</a>
+          <nav>
+            <a href="#" aria-current="page">Home</a>
+            <a href="#">Other page</a>
+          </nav>
         </x-squircle>
       </div>
     </section>

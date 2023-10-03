@@ -1,6 +1,12 @@
 {
   "name": "lit-squircle",
   "version": "0.0.2",
+  "keywords": [
+    "lit",
+    "web components",
+    "squircle",
+    "lit-elements"
+  ],
   "type": "module",
   "main": "dist/squircle.js",
   "module": "dist/squircle.js",

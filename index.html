@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Lit + TS</title>
+    <title>Squircle in Web Component</title>
     <script type="module" src="/src/my-element.ts"></script>
     <style>
       .canvas {
@@ -18,6 +18,13 @@
         border: 2px solid red;
         border-radius: 32px;
       }
+
+      .example2 {
+        background-image: linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%);
+        padding: 8px 16px;
+        border-radius: 32px;
+        box-shadow: 8px 8px 2px 1px rgba(0, 0, 205, .2);
+      }
     </style>
   </head>
   <body>
@@ -25,12 +32,25 @@
       <h2>01: pure color background, padding.</h2>
       <div class="canvas">
         <x-squircle class="example1 squircle" radius="32">
-          <h1>Vite + Lit</h1>
+          <h1>Squircle</h1>
         </x-squircle>
       </div>
       <div class="canvas">
         <div class="example1 radius">
-          <h1>Vite + Lit</h1>
+          <h1>Squircle</h1>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2>02: shadow & gradient background</h2>
+      <div class="canvas">
+        <x-squircle class="example2 squircle" radius="32">
+          <h1>Squircle</h1>
+        </x-squircle>
+      </div>
+      <div class="canvas">
+        <div class="example2 radius">
+          <h1>Squircle</h1>
         </div>
       </div>
     </section>

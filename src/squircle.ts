@@ -38,14 +38,11 @@ export class Squircle extends LitElement {
     const { width, height } = this.getBoundingClientRect()
     this.width = width;
     this.height = height;
+    console.log('in firstUpdated', this.className, width, height)
 
     // Copy style from the shadow root to the inner container.
     const computedStyle = getComputedStyle(this)
-    this.containerStyles = css`
-      width: ${width}px;
-      height: 100%;
-      padding: ${unsafeCSS(computedStyle.padding)};
-    `
+    this.containerStyles = css`padding: ${unsafeCSS(computedStyle.padding)};`
     this.fill = computedStyle.backgroundColor || 'transparent'
 
     //
@@ -74,12 +71,19 @@ export class Squircle extends LitElement {
       </svg>
     `
     const dataUrl = `url('data:image/svg+xml;base64,${btoa(svgCode)}')`
+    console.log('in render', this.className, width, height)
+
+    // The init width && height is 0, so we not use it at first render.
+    const sizes = (width !== 0 && height !== 0)
+      ? css`width: ${width}px; height: ${height}px;`
+      : css`width: 100%; height: 100%;`
 
     // Apply the shadow root styles to the inner container, and
     // replace the background image with the svg.
     // NOTE: the border-radius is required as hacks to rendering the
     // backgroung svg correctly.
     const containerStyle = css`
+      ${unsafeCSS(sizes)}
       ${unsafeCSS(this.containerStyles)}
       background-image: ${unsafeCSS(dataUrl)};
       background-repeat: no-repeat;

@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+      /**
+       * simple global styling.
+       */
       body {
         font-family: Lato;
       }
@@ -20,9 +23,14 @@
       .canvas {
         padding: 10px;
       }
+
       .radius {
         border-radius: 32px;
       }
+
+      /**
+       * For each example / test case.
+       */
 
       .example1 {
         text-align: center;
@@ -35,24 +43,22 @@
       .example2 {
         background-image: linear-gradient(140deg, #EADEDB 0%, #BC70A4 50%, #BFD641 75%);
         padding: 8px 16px;
-        box-shadow: 8px 8px 2px 1px rgba(0, 0, 205, .2);
+        box-shadow: 8px 8px 2px 1px rgba(0, 0, 0, .45);
       }
 
       .example3 {
         background-color: red;
         padding: 8px 16px;
       }
-      .example3 nav {
-        display: flex;
-        justify-content: space-between;
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-      .example3 nav a {
-        color: #fff;
-        font-weight: bold;
-        text-decoration: none;
-      }
+        .example3 nav {
+          display: flex;
+          justify-content: space-between;
+        }
+        .example3 a {
+          color: #fff;
+          font-weight: bold;
+          text-decoration: none;
+        }
     </style>
   </head>
   <body>
@@ -86,10 +92,8 @@
       <h2>03: Nav & default settings</h2>
       <div class="canvas">
         <x-squircle class="example3" radius="32">
-          <nav>
-            <a href="#" aria-current="page">Home</a>
-            <a href="#">Other page</a>
-          </nav>
+          <a href="#" aria-current="page">Home</a>
+          <a href="#">Other page</a>
         </x-squircle>
       </div>
     </section>

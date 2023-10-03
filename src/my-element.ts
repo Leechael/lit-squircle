@@ -23,8 +23,8 @@ export class Squircle extends LitElement {
   @property({type: String})
   fill: string = 'yellow';
 
-  _width = 0;
-  _height = 0;
+  protected _width = 0;
+  protected _height = 0;
 
   recalcChildrenRect() {
     let width = 0
@@ -46,26 +46,35 @@ export class Squircle extends LitElement {
   }
 
   render() {
+    const [width, height] = [this._width, this._height]
     const dots = getSvgPath({
-      width: this._width,
-      height: this._height,
+      width,
+      height,
       cornerRadius: this.radius,
       cornerSmoothing: this.cornerSmoothing,
     })
-    console.log('call render', this._width, this._height)
-    let override = ''
-    if (this._height && this._width) {
-      override = `width: ${this._width}px; height: ${this._height}px;`
-    }
+    const svgCode = `
+      <svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+        <path d="${dots}" fill="${this.fill}" />
+      </svg>
+    `
+    // let override = css``
+    // if (this._height && this._width) {
+    //   override = css`
+    //     width: ${this._width}px;
+    //     height: ${this._height}px;
+    //   `
+    // }
+    const includeUrl = `url('data:image/svg+xml;base64,${btoa(svgCode)}')`
+      // border-radius: ${this.radius * 1.05}px;
+      // background-color: ${unsafeCSS(this.fill)};
+    const containerStyle = css`
+      background-image: ${unsafeCSS(includeUrl)};
+      background-repeat: no-repeat;
+    `
     // const baseRadius = 20;
     return html`
-      <div
-        class="relative"
-        style="border-radius: ${this.radius * 1.05}px; background-color: ${this.fill}; ${override}"
-      >
-        <svg class="absolute top-0 left-0 right-0 bottom-0 z-[-1]">
-          <path d="${dots}" fill="${this.fill}"></path>
-        </svg>
+      <div style=${containerStyle}>
         <slot></slot>
       </div>
     `

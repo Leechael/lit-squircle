@@ -1,4 +1,4 @@
-import { LitElement, adoptStyles, css, html, unsafeCSS } from 'lit'
+import { LitElement, css, html, unsafeCSS } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { getSvgPath } from 'figma-squircle'
 
@@ -74,7 +74,6 @@ export class Squircle extends LitElement {
         <path d="${dots}" fill="${this.fill}" />
       </svg>
     `
-    console.log('svgCode', svgCode)
     const dataUrl = `url('data:image/svg+xml;base64,${btoa(svgCode)}')`
 
     // Apply the shadow root styles to the inner container, and

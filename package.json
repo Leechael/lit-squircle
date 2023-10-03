@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "anaylze": "wca analyze src --outFile dist/custom-elements.json",
+    "analyze": "wca analyze src --outFile dist/custom-elements.json",
     "release": "npm run build && tsc -d && npm publish --access public"
   },
   "dependencies": {

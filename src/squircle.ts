@@ -4,6 +4,10 @@ import { getSvgPath } from 'figma-squircle'
 
 import style from './squircle.css?inline' assert {type: 'css'};
 
+function pxToNumber(px: string) {
+  return Number(px.replace(/px$/, ''))
+}
+
 /**
  * @slot - This element has a slot
  */
@@ -32,29 +36,35 @@ export class Squircle extends LitElement {
   protected firstUpdated() {
     // Force render as block, otherwise the height will calcuate incorrect.
     this.style.display = 'block';
+
     // Get the width and height of the shadow root, and save to the state
     // so we can trigger update after firstUpdated and rendering the svg
     // background correctly.
     const { width, height } = this.getBoundingClientRect()
     this.width = width;
     this.height = height;
-    console.log('in firstUpdated', this.className, width, height)
 
     // Copy style from the shadow root to the inner container.
     const computedStyle = getComputedStyle(this)
-    this.containerStyles = css`padding: ${unsafeCSS(computedStyle.padding)};`
+    const padding = computedStyle.padding
+    this.containerStyles = css`padding: ${unsafeCSS(padding)};`
     this.fill = computedStyle.backgroundColor || 'transparent'
 
     //
     // Reset the styles of the shadow root.
     //
-    // Set padding to 0 and move to the inner container.
     this.style.padding = '0';
     // Border is not supported.
     // @fixme Maybe we we can applied border in the svg.
     this.style.border = '0 solid transparent';
     // Remove the background
     this.style.backgroundColor = 'transparent';
+
+    window.addEventListener('resize', () => {
+      const { width, height } = this.getBoundingClientRect()
+      this.width = width;
+      this.height = height;
+    })
   }
 
   render() {
@@ -71,7 +81,6 @@ export class Squircle extends LitElement {
       </svg>
     `
     const dataUrl = `url('data:image/svg+xml;base64,${btoa(svgCode)}')`
-    console.log('in render', this.className, width, height)
 
     // The init width && height is 0, so we not use it at first render.
     const sizes = (width !== 0 && height !== 0)

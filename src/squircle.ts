@@ -5,10 +5,7 @@ import { getSvgPath } from 'figma-squircle'
 import style from './squircle.css?inline' assert {type: 'css'};
 
 /**
- * An example element.
- *
  * @slot - This element has a slot
- * @csspart button - The button
  */
 @customElement('x-squircle')
 export class Squircle extends LitElement {

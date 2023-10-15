@@ -14,6 +14,8 @@ import style from './squircle.css?inline' assert {type: 'css'};
 const regex_linear_gradient = /linear-gradient\(\s*([^,]+)(\s*(,\s*#?\w+(\(([\.\d]+(\s*,\s*[\.\d]+)+)\))?(\s+\d+%)?)+)\)/
 const regex_linear_color_stop = /(#?\w+(\(([\.\d]+(\s*,\s*[\.\d]+)+)\))?)(\s+\d+%)?/g
 
+const regex_shadow = /(#?\w+(\(([\.\d]+(\s*,\s*[\.\d]+)+)\))?)(\s+(\d+)\w+)+/
+
 function parseCssLinearGradient(str: string) {
   const match = str.match(regex_linear_gradient)
   if (!match || !match.length || !match[1] || !match[2]) {
@@ -24,6 +26,16 @@ function parseCssLinearGradient(str: string) {
     return { color: i[1], stop: (i[5] || '').trim() }
   })
   return { angle, colorStops }
+}
+
+function boxShadowToDropShadow(str: string) {
+  const match = str.match(regex_shadow)
+  if (!match || !match.length) {
+    return null
+  }
+  const color = match[1]
+  const lengths = str.replace(color, '').trim().split(' ')
+  return `drop-shadow(${color} ${lengths[0]} ${lengths[1]} ${lengths[2]})`
 }
 
 interface Gradient {
@@ -57,6 +69,9 @@ export class Squircle extends LitElement {
 
   @state()
   protected gradient: Gradient | null = null;
+
+  @state()
+  protected boxShadow: string = '';
 
   protected containerStyles = unsafeCSS('')
 
@@ -109,6 +124,14 @@ export class Squircle extends LitElement {
         computedStyle.order ? `order: ${computedStyle.order};` : '',
         computedStyle.gap ? `gap: ${computedStyle.gap};` : '',
       ]
+    }
+
+    if (computedStyle.boxShadow) {
+      const value = boxShadowToDropShadow(computedStyle.boxShadow)
+      if (value) {
+        this.style.filter = value;
+      }
+      this.style.boxShadow = 'none';
     }
 
     this.containerStyles = css`

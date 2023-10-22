@@ -21,14 +21,20 @@ No yet production ready. If you want a more flexible implementation, consider us
 
 ## Usage
 
-For pure HTML, you just import the `lit-squircle.js` in the HTML head, then:
+For pure HTML page, put this line in `<head />`:
+
+```html
+<script type="module" src="https://unpkg.com/lit-squircle/dist/lit-squircle.js" async></script>
+```
+
+And you can use it on page:
 
 ```html
 <x-squircle radius="32">
-    <a href="#">Menu 1</a>
-    <a href="#">Menu 2</a>
-    <a href="#">Menu 3</a>
-    <a href="#">Menu 4</a>
+  <a href="#">Menu 1</a>
+  <a href="#">Menu 2</a>
+  <a href="#">Menu 3</a>
+  <a href="#">Menu 4</a>
 </x-squircle>
 ```
 
